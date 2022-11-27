@@ -4,4 +4,13 @@
     <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="5.0.17" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Vote.Application\Vote.Application.csproj" />
+    <ProjectReference Include="..\Vote.Domain\Vote.Domain.csproj" />
+  </ItemGroup>
+
 </Project>
