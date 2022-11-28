@@ -1,4 +1,6 @@
-﻿using Vote.Domain.Enums;
+﻿using System.Collections;
+using System.Collections.Generic;
+using Vote.Domain.Enums;
 
 namespace Vote.Domain.Entities
 {
@@ -9,5 +11,12 @@ namespace Vote.Domain.Entities
         public string Description { get; set; }
         public string Image { get; set; }
         public Category Category { get; set; }
+        [Newtonsoft.Json.JsonIgnore]
+        [System.Text.Json.Serialization.JsonIgnore]
+        public ICollection<Person> Persons { get; set; } = new List<Person>();
+
+        [Newtonsoft.Json.JsonIgnore]
+        [System.Text.Json.Serialization.JsonIgnore]
+        public List<Vote> Votes { get; set; } = new List<Vote>();
     }
 }
