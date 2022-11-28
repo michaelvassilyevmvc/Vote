@@ -29,7 +29,7 @@ namespace Vote
         {
             services.AddDbContext<VoteDbContext>(options =>
             {
-                options.UseSqlite(Configuration.GetConnectionString("DefaultConnection"));
+                options.UseSqlite(Configuration.GetConnectionString("DefaultConnection")).UseSnakeCaseNamingConvention();
             });
             services.AddControllers();
             services.AddSwaggerGen(c =>
