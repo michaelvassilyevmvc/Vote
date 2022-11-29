@@ -1,62 +1,45 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
-using Vote.Data.Context;
-using Vote.Domain.Entities;
+using Vote.Application.Persons.Commands.CreatePerson;
+using Vote.Application.Persons.Commands.DeletePerson;
+using Vote.Application.Persons.Commands.UpdatePerson;
+using Vote.Application.Persons.Queries.GetPersons;
 
 namespace Vote.WebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class PersonsController : ControllerBase
+    public class PersonsController : ApiController
     {
-        private readonly VoteDbContext _context;
-
-        public PersonsController(VoteDbContext context)
-        {
-            _context = context;
-        }
-
         [HttpGet]
-        public IActionResult Get()
+        public async Task<ActionResult<PersonsVm>> Get()
         {
-            return Ok(_context.Persons);
+            return await Mediator.Send(new GetPersonsQuery());
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] Person person)
+        public async Task<ActionResult<int>> Create(CreatePersonCommand command)
         {
-            await _context.Persons.AddAsync(person);
-            await _context.SaveChangesAsync();
-
-            return Ok();
-        }
-
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetById([FromRoute] int id)
-        {
-            var person = await _context.Persons.FirstOrDefaultAsync(p => p.Id == id);
-            if (person == null) { return NotFound(); }
-
-            return Ok(person);
+            return await Mediator.Send(command);
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete([FromRoute] int id)
+        public async Task<ActionResult> Delete(int id)
         {
-            var person = await _context.Persons.FirstOrDefaultAsync(p =>p.Id == id);
-            if (person == null) { return NotFound(); }
-            _context.Persons.Remove(person);
-            await _context.SaveChangesAsync();
-            return Ok(person);
+            await Mediator.Send(new DeletePersonCommand { Id = id });
+            return NoContent();
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update([FromRoute] int id, [FromBody] Person person)
+        public async Task<IActionResult> Update(int id, UpdatePersonCommand command)
         {
-            _context.Update(person);
-            await _context.SaveChangesAsync();
-            return Ok();
+            if (id != command.Id)
+            {
+                return BadRequest();
+            }
+
+            await Mediator.Send(command);
+            return NoContent();
         }
     }
 }

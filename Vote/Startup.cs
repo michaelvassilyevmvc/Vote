@@ -12,7 +12,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Vote.Application;
+using Vote.Data;
 using Vote.Data.Context;
+using Vote.Shared;
+using Vote.WebApi.Filter;
 
 namespace Vote
 {
@@ -27,14 +31,18 @@ namespace Vote
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<VoteDbContext>(options =>
-            {
-                options.UseSqlite(Configuration.GetConnectionString("DefaultConnection")).UseSnakeCaseNamingConvention();
-            });
+            services.AddApplication();
+            services.AddInfrastructureData();
+            services.AddInfrastructureShared(Configuration);
+            services.AddHttpContextAccessor();
+
             services.AddControllers();
+            services.AddControllersWithViews(options => options.Filters.Add(new ApiExceptionFilter()));
+            services.Configure<ApiBehaviorOptions>(options => options.SuppressModelStateInvalidFilter = true);
+
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Vote", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Vote.WebApi", Version = "v1" });
             });
         }
 

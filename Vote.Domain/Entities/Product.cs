@@ -17,6 +17,6 @@ namespace Vote.Domain.Entities
 
         [Newtonsoft.Json.JsonIgnore]
         [System.Text.Json.Serialization.JsonIgnore]
-        public List<Vote> Votes { get; set; } = new List<Vote>();
+        public List<VotePerson> Votes { get; set; } = new List<VotePerson>();
     }
 }
