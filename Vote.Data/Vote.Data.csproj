@@ -28,6 +28,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Vote.Application\Vote.Application.csproj" />
     <ProjectReference Include="..\Vote.Domain\Vote.Domain.csproj" />
+    <ProjectReference Include="..\Vote.Shared\Vote.Shared.csproj" />
   </ItemGroup>
 
 </Project>

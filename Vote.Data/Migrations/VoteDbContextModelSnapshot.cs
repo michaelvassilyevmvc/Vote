@@ -14,95 +14,78 @@ namespace Vote.Data.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasDefaultSchema("products")
+                .HasDefaultSchema("votes")
                 .HasAnnotation("ProductVersion", "5.0.17");
 
             modelBuilder.Entity("Vote.Domain.Entities.Person", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER")
-                        .HasColumnName("id");
+                        .HasColumnType("INTEGER");
 
                     b.Property<int>("Age")
-                        .HasColumnType("INTEGER")
-                        .HasColumnName("age");
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Name")
-                        .HasColumnType("TEXT")
-                        .HasColumnName("name");
+                        .HasColumnType("TEXT");
 
-                    b.HasKey("Id")
-                        .HasName("pk_persons");
+                    b.HasKey("Id");
 
-                    b.ToTable("persons");
+                    b.ToTable("Persons");
                 });
 
             modelBuilder.Entity("Vote.Domain.Entities.Product", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER")
-                        .HasColumnName("id");
+                        .HasColumnType("INTEGER");
 
                     b.Property<int>("Category")
-                        .HasColumnType("INTEGER")
-                        .HasColumnName("category");
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Description")
-                        .HasColumnType("TEXT")
-                        .HasColumnName("description");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Image")
-                        .HasColumnType("TEXT")
-                        .HasColumnName("image");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
-                        .HasColumnType("TEXT")
-                        .HasColumnName("name");
+                        .HasColumnType("TEXT");
 
-                    b.HasKey("Id")
-                        .HasName("pk_products");
+                    b.HasKey("Id");
 
-                    b.ToTable("products");
+                    b.ToTable("Products");
                 });
 
-            modelBuilder.Entity("Vote.Domain.Entities.Vote", b =>
+            modelBuilder.Entity("Vote.Domain.Entities.VotePerson", b =>
                 {
                     b.Property<int>("PersonId")
-                        .HasColumnType("INTEGER")
-                        .HasColumnName("person_id");
+                        .HasColumnType("INTEGER");
 
                     b.Property<int>("ProductId")
-                        .HasColumnType("INTEGER")
-                        .HasColumnName("product_id");
+                        .HasColumnType("INTEGER");
 
                     b.Property<DateTime>("VoteDate")
-                        .HasColumnType("TEXT")
-                        .HasColumnName("vote_date");
+                        .HasColumnType("TEXT");
 
-                    b.HasKey("PersonId", "ProductId")
-                        .HasName("pk_votes");
+                    b.HasKey("PersonId", "ProductId");
 
-                    b.HasIndex("ProductId")
-                        .HasDatabaseName("ix_votes_product_id");
+                    b.HasIndex("ProductId");
 
-                    b.ToTable("votes");
+                    b.ToTable("Votes");
                 });
 
-            modelBuilder.Entity("Vote.Domain.Entities.Vote", b =>
+            modelBuilder.Entity("Vote.Domain.Entities.VotePerson", b =>
                 {
                     b.HasOne("Vote.Domain.Entities.Person", "Person")
                         .WithMany("Votes")
                         .HasForeignKey("PersonId")
-                        .HasConstraintName("fk_votes_persons_person_id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Vote.Domain.Entities.Product", "Product")
                         .WithMany("Votes")
                         .HasForeignKey("ProductId")
-                        .HasConstraintName("fk_votes_products_product_id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

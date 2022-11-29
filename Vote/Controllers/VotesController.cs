@@ -27,7 +27,7 @@ namespace Vote.WebApi.Controllers
         
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] Domain.Entities.Vote vote)
+        public async Task<IActionResult> Create([FromBody] Domain.Entities.VotePerson vote)
         {
            await _context.Votes.AddAsync(vote);
             await _context.SaveChangesAsync();
@@ -35,7 +35,7 @@ namespace Vote.WebApi.Controllers
         }
 
         [HttpPut]
-        public async Task<IActionResult> Update([FromRoute] int id, [FromBody] Domain.Entities.Vote vote)
+        public async Task<IActionResult> Update([FromRoute] int id, [FromBody] Domain.Entities.VotePerson vote)
         {
             _context.Update(vote);
             await _context.SaveChangesAsync();

@@ -2,6 +2,11 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
+using Vote.Application.Products.Commands.CreateProduct;
+using Vote.Application.Products.Commands.DeleteProduct;
+using Vote.Application.Products.Commands.UpdateProduct;
+using Vote.Application.Products.Queries.ExportProducts;
+using Vote.Application.Products.Queries.GetProducts;
 using Vote.Data.Context;
 using Vote.Domain.Entities;
 
@@ -9,61 +14,45 @@ namespace Vote.WebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ProductsController : ControllerBase
+    public class ProductsController : ApiController
     {
-        private readonly VoteDbContext _context;
-
-        public ProductsController(VoteDbContext context)
-        {
-            _context = context;
-        }
 
         [HttpGet]
-        public IActionResult Get()
+        public async Task<ActionResult<ProductsVm>> Get()
         {
-            return Ok(_context.Products);
+            return await Mediator.Send(new GetProductsQuery());
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetById([FromRoute] int id)
+        public async Task<FileResult> Get(int id)
         {
-            var product = await _context.Products.SingleOrDefaultAsync(p => p.Id == id);
-            if(product == null)
-            {
-                return NotFound();
-            }
-            return Ok(product);
+            var vm = await Mediator.Send(new ExportProductQuery { Id = id });
+            return File(vm.Content, vm.ContentType, vm.FileName);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] Product product)
+        public async Task<ActionResult<int>> Create(CreateProductCommand command)
         {
-            await _context.Products.AddAsync(product);
-            await _context.SaveChangesAsync();
-
-            return Ok();
+            return await Mediator.Send(command);
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete([FromRoute] int id)
+        public async Task<ActionResult> Delete(int id)
         {
-            var product = await _context.Products.SingleOrDefaultAsync(p => p.Id == id);
-            if(product == null)
-            {
-                return NotFound();
-            }
-
-            _context.Products.Remove(product);
-            await _context.SaveChangesAsync();
-            return Ok(product);
+            await Mediator.Send(new DeleteProductCommand { Id = id });
+            return NoContent();
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update([FromRoute] int id, [FromBody] Product product)
+        public async Task<ActionResult> Update(int id, UpdateProductCommand command)
         {
-            _context.Update(product);
-            await _context.SaveChangesAsync();
-            return Ok();
+            if (id != command.Id)
+            {
+                return BadRequest();
+            }
+
+            await Mediator.Send(command);
+            return NoContent();
         }
     }
 }
