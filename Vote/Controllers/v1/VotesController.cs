@@ -5,10 +5,9 @@ using System.Threading.Tasks;
 using Vote.Data.Context;
 using Vote.Domain.Entities;
 
-namespace Vote.WebApi.Controllers
+namespace Vote.WebApi.Controllers.v1
 {
-    [Route("api/[controller]")]
-    [ApiController]
+    
     public class VotesController : ControllerBase
     {
         private readonly VoteDbContext _context;
@@ -24,18 +23,18 @@ namespace Vote.WebApi.Controllers
             return Ok(_context.Votes);
         }
 
-        
+
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] Domain.Entities.VotePerson vote)
+        public async Task<IActionResult> Create([FromBody] VotePerson vote)
         {
-           await _context.Votes.AddAsync(vote);
+            await _context.Votes.AddAsync(vote);
             await _context.SaveChangesAsync();
             return Ok();
         }
 
         [HttpPut]
-        public async Task<IActionResult> Update([FromRoute] int id, [FromBody] Domain.Entities.VotePerson vote)
+        public async Task<IActionResult> Update([FromRoute] int id, [FromBody] VotePerson vote)
         {
             _context.Update(vote);
             await _context.SaveChangesAsync();

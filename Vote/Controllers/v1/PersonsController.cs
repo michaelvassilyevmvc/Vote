@@ -5,10 +5,8 @@ using Vote.Application.Persons.Commands.DeletePerson;
 using Vote.Application.Persons.Commands.UpdatePerson;
 using Vote.Application.Persons.Queries.GetPersons;
 
-namespace Vote.WebApi.Controllers
+namespace Vote.WebApi.Controllers.v1
 {
-    [Route("api/[controller]")]
-    [ApiController]
     public class PersonsController : ApiController
     {
         [HttpGet]

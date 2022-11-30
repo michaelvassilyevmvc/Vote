@@ -10,10 +10,9 @@ using Vote.Application.Products.Queries.GetProducts;
 using Vote.Data.Context;
 using Vote.Domain.Entities;
 
-namespace Vote.WebApi.Controllers
+namespace Vote.WebApi.Controllers.v1
 {
-    [Route("api/[controller]")]
-    [ApiController]
+    
     public class ProductsController : ApiController
     {
 

@@ -2,8 +2,9 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Vote.WebApi.Controllers
+namespace Vote.WebApi.Controllers.v1
 {
+    [ApiVersion("1.0")]
     [ApiController]
     [Route("api/[controller]")]
     public class ApiController : ControllerBase
